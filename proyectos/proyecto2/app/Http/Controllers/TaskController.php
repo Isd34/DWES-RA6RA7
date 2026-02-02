@@ -14,16 +14,29 @@ class TaskController extends Controller
     }
 
     // Crear una nueva tarea
-    public function store(Request $request)
-    {
-        $task = Task::create($request->all());
-        return response()->json($task, 201);
+    public function store(Request $request) {
+        // Validar datos de entrada
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string'
+        ]);
+        $task = Task::create($validatedData);
+        return response()->json([
+            'message' => 'Tarea creada exitosamente',
+            'data' => $task
+        ], 201);
     }
 
     // Mostrar una tarea específica
-    public function show($id)
-    {
-        return Task::findOrFail($id);
+    public function show($id) {
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json([
+                'error' => 'Tarea no encontrada',
+                'message' => "No existe una tarea con ID {$id}"
+            ], 404);
+        }
+        return response()->json($task, 200);
     }
 
     // Actualizar una tarea
