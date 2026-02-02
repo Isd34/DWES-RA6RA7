@@ -16,28 +16,73 @@ class TaskController extends Controller
     // Crear una nueva tarea
     public function store(Request $request)
     {
-        $task = Task::create($request->all());
-        return response()->json($task, 201);
+        // Validar datos de entrada
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string'
+        ]);
+        $task = Task::create($validatedData);
+        return response()->json([
+            'message' => 'Tarea creada exitosamente',
+            'data' => $task
+        ], 201);
     }
 
     // Mostrar una tarea específica
     public function show($id)
     {
-        return Task::findOrFail($id);
+        $task = Task::find($id);
+        if (!$task) {
+            return response()->json([
+                'error' => 'Tarea no encontrada',
+                'message' => "No existe una tarea con ID {$id}"
+            ], 404);
+        }
+        return response()->json($task, 200);
     }
 
-    // Actualizar una tarea
+    // Función update para actualizar tareas con control de errores
     public function update(Request $request, $id)
     {
-        $task = Task::findOrFail($id);
-        $task->update($request->all());
-        return $task;
+        $task = Task::find($id);
+
+        if (!$task) {
+            return response()->json([
+                'error' => 'Tarea no encontrada',
+                'message' => "No existe una tarea con ID {$id}"
+            ], 404);
+        }
+
+        // Validar datos
+        $validatedData = $request->validate([
+            'title' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|required|string'
+        ]);
+
+        $task->update($validatedData);
+
+        return response()->json([
+            'message' => 'Tarea actualizada con éxito.',
+            'data' => $task
+        ], 200);
     }
 
-    // Eliminar una tarea
+    // Función para eliminar tareas con control de errores
     public function destroy($id)
     {
-        Task::findOrFail($id)->delete();
-        return response()->noContent();
+        $task = Task::find($id);
+
+        if (!$task) {
+            return response()->json([
+                'error' => 'Tarea no encontrada',
+                'message' => "No existe una tarea con ID {$id}"
+            ], 404);
+        }
+
+        $task->delete();
+
+        return response()->json([
+            'message' => 'Tarea eliminada exitosamente'
+        ], 200);
     }
 }
