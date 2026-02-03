@@ -125,11 +125,11 @@ php artisan key:generate
 
 | Acción | Método | URL |
 |--------|--------|-----|
-| Listar tareas | GET | `/proyecto2/public/tasks` |
-| Ver tarea | GET | `/proyecto2/public/tasks/{id}` |
-| Crear tarea | POST | `/proyecto2/public/tasks` |
-| Actualizar tarea | PUT | `/proyecto2/public/tasks/{id}` |
-| Eliminar tarea | DELETE | `/proyecto2/public/tasks/{id}` |
+| Listar tareas | GET | `/proyecto2/public/api/tasks` |
+| Ver tarea | GET | `/proyecto2/public/api/tasks/{id}` |
+| Crear tarea | POST | `/proyecto2/public/api/tasks` |
+| Actualizar tarea | PUT | `/proyecto2/public/api/tasks/{id}` |
+| Eliminar tarea | DELETE | `/proyecto2/public/api/tasks/{id}` |
 
 ### Ejemplo de uso con Thunder Client
 
